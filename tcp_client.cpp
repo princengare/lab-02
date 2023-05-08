@@ -23,6 +23,7 @@ int main(int argc, char const *argv[])
 	int client_fd = -1;
 
 	// TODO: Create a TCP socket()
+	
 
 	// Enable reusing address and port
 	if (setsockopt(client_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) { 
@@ -44,10 +45,30 @@ int main(int argc, char const *argv[])
 	getaddrinfo(server_ip.c_str(), server_port.c_str(), &hints, &server_addr);
 
 	// TODO: Connect() to the server (hint: you'll need to use server_addr)
+	if (connect(client_fd, server_addr->ai_addr, server_addr->ai_addrlen) == -1) {
+	printf("Connection to server failed");
+	return -1;
+	}
 	// TODO: Retreive user input
+	std::string user_input;
+	std::cout << "Enter a message: ";
+	std::getline(std::cin, user_input);
 	// TODO: Send() the user input to the server
+	if (send(client_fd, user_input.c_str(), user_input.length(), 0) == -1) {
+	printf("Error sending message");
+	return -1;
+}
 	// TODO: Recieve any messages from the server and print it here. Don't forget to make sure the string is null terminated!
+	int num_bytes_received = recv(client_fd, socket_read_buffer, 1024, 0);
+if (num_bytes_received == -1) {
+	printf("Error receiving message");
+	return -1;
+} else {
+	socket_read_buffer[num_bytes_received] = '\0';
+	printf("Message from server: %s\n", socket_read_buffer);
+}
 	// TODO: Close() the socket
+	close(client_fd);
 
 	return 0; 
 } 
