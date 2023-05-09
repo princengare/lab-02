@@ -13,7 +13,7 @@ def main():
     # TODO: Receive a response from the server and close the TCP connection
     
     # Define the IP address and port of the server
-    SERVER_IP = 'localhost'
+    SERVER_IP = '172.20.10.2'
     SERVER_PORT = 8080
 
     # Create a socket object
