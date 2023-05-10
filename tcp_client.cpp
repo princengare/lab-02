@@ -20,7 +20,7 @@ int main(int argc, char const *argv[])
 	std::string server_port = "8080";
 
 	int opt = 1;
-	int client_fd = -1;
+	int client_fd = socket(AF_INET, SOCK_STREAM, 0);
 
 	// TODO: Create a TCP socket()
 	
@@ -53,20 +53,15 @@ int main(int argc, char const *argv[])
 	std::string user_input;
 	std::cout << "Enter a message: ";
 	std::getline(std::cin, user_input);
+	
 	// TODO: Send() the user input to the server
-	if (send(client_fd, user_input.c_str(), user_input.length(), 0) == -1) {
-	printf("Error sending message");
-	return -1;
-}
+	send(client_fd, user_input.c_str(), user_input.size(), 0);
+	
 	// TODO: Recieve any messages from the server and print it here. Don't forget to make sure the string is null terminated!
-	int num_bytes_received = recv(client_fd, socket_read_buffer, 1024, 0);
-if (num_bytes_received == -1) {
-	printf("Error receiving message");
-	return -1;
-} else {
-	socket_read_buffer[num_bytes_received] = '\0';
-	printf("Message from server: %s\n", socket_read_buffer);
-}
+	recv(client_fd, socket_read_buffer, sizeof(socket_read_buffer), 0);
+	socket_read_buffer[sizeof(socket_read_buffer) - 1] = '\0';
+	std::cout << "Server Response: " << socket_read_buffer << std::endl;
+	
 	// TODO: Close() the socket
 	close(client_fd);
 
